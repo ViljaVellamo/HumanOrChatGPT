@@ -10,11 +10,16 @@ accuracy = 0
 
 def fetch_poem (file_number, row_number):
 
+    # The function opens a table to fetch and return a poem from the indicated row.
+    # The Table 1 contains poems by poets and Table 2 poems generated with ChatGPT.
+
     with open ('Table ' + str(file_number) + '.csv', newline='', encoding='utf-8-sig') as csvfile:
         reader = csv.reader(csvfile)
         poem_from_table = ""
         rows = list(reader)
         cell = rows[row_number]
+        print("Tän pitäisi olla norjaksi " , rows[159])
+
         for row in cell:
             poem_from_table += str(row)
 
@@ -24,10 +29,11 @@ while True:
     language = input("Welcome to the game of 'Is it human or ChatGPT'.\n"
                                "You will be shown a poem that can be either written by a human or by ChatGPT.\n"
                                "To choose the language of the poems, press 'en' for English, 'fi' for Finnish, "
-                               "or 'both' for both.\n")
+                               "and 'no' for Norwegian (or Dano-Norwegian).\n")
 
-    if language != "fi" and language != "en" and language != "both":
-        print("Please choose the language by typing 'en' for English, 'fi' for Finnish, or 'both' for both.\n")
+    if language != "fi" and language != "en" and language != "no":
+        print("Please choose the language by typing 'en' for English, 'fi' for Finnish, or 'no' for for Norwegian "
+              "(or Dano-Norwegian).\n")
         continue
 
     while True:
@@ -46,14 +52,20 @@ while True:
             file_number = random.randint(1, 2)
             row_number = 0
 
+            # The range of texts that can be shown to the user are selected based on the language.
+
             i = 0
             while i < 1000000:
                 if language == "en":
-                    row_number = random.randint(0, 55)
+                    row_number = random.randint(0, 69)
                 if language == "fi":
-                    row_number = random.randint(56, 99)
-                if language == "both":
-                    row_number = random.randint(0, 99)
+                    row_number = random.randint(70, 119)
+                if language == "no":
+                    row_number = random.randint(120, 159)
+
+                # To avoid showing the same poem multiple times, the number of every shown poem is saved in a list.
+                # If the generated number cannot be found on the list of previously shown poems, the number is selected,
+                # added to  the list and the loop ends.
 
                 if file_number == 1:
                     if row_number not in generated_numbers_poets:
@@ -76,7 +88,9 @@ while True:
 
                 if human_or_chatGPT == "1" or human_or_chatGPT == "2":
 
-                    with open ("Table 1 only  authors.csv", newline='', encoding='utf-8-sig') as csvfile:
+                    # The name of the author is fetched from a separate file according to the row number.
+
+                    with open ("Table 1 only authors.csv", newline='', encoding='utf-8-sig') as csvfile:
                         reader = csv.reader(csvfile)
                         rows = list(reader)
                         author_name = str(rows[row_number]).translate(str.maketrans('', '', string.punctuation))
