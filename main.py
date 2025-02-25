@@ -18,7 +18,6 @@ def fetch_poem (file_number, row_number):
         poem_from_table = ""
         rows = list(reader)
         cell = rows[row_number]
-        print("Tän pitäisi olla norjaksi " , rows[159])
 
         for row in cell:
             poem_from_table += str(row)
